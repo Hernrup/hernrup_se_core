@@ -1,0 +1,45 @@
+[submodule "core/themes"]
+	path = core/themes
+	url = https://github.com/getpelican/pelican-themes
+[submodule "core/plugins"]
+	path = core/plugins
+	url = https://github.com/getpelican/pelican-plugins.git
+[submodule "core/alchemy"]
+	path = core/alchemy
+	url = https://github.com/nairobilug/pelican-alchemy.git
+[submodule "core/themes/alchemy"]
+	path = core/themes/alchemy
+	url = https://github.com/nairobilug/pelican-alchemy.git
+[submodule "core/themes/pelican-alchemy"]
+	path = core/themes/pelican-alchemy
+	url = https://github.com/nairobilug/pelican-alchemy.git
+[submodule "core/themes/pelican-mockingbird"]
+	path = core/themes/pelican-mockingbird
+	url = https://github.com/wrl/pelican-mockingbird.git
+[submodule "core/themes/pelican-chunk"]
+	path = core/themes/pelican-chunk
+	url = https://github.com/tbunnyman/pelican-chunk.git
+[submodule "core/themes/Flex"]
+	path = core/themes/Flex
+	url = https://github.com/alexandrevicenzi/Flex.git
+[submodule "core/themes/pelican-free-agent"]
+	path = core/themes/pelican-free-agent
+	url = https://github.com/callmefish/pelican-free-agent.git
+[submodule "core/themes/html5-dopetrope"]
+	path = core/themes/html5-dopetrope
+	url = https://github.com/PierrePaul/html5-dopetrope.git
+[submodule "core/themes/pelican-mg"]
+	path = core/themes/pelican-mg
+	url = https://github.com/lucachr/pelican-mg.git
+[submodule "core/themes/nest"]
+	path = core/themes/nest
+	url = https://github.com/molivier/nest.git
+[submodule "core/themes/pjport"]
+	path = core/themes/pjport
+	url = https://github.com/piefa703/pjport.git
+[submodule "core/themes/twenty-pelican-html5up"]
+	path = core/themes/twenty-pelican-html5up
+	url = https://github.com/frankV/twenty-pelican-html5up.git
+[submodule "core/themes/svbhack"]
+	path = core/themes/svbhack
+	url = https://github.com/Hernrup/pelican-svbhack.git
