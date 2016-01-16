@@ -32,8 +32,6 @@ LINKS = []
 
 # Social widget
 SOCIAL = (
-    ('Github', 'https://github.com/Hernrup'),
-    ('LinkedIn', 'https://se.linkedin.com/pub/mikael-hernrup/31/247/624'),
 )
 
 DEFAULT_PAGINATION = False
@@ -49,9 +47,6 @@ EXTRA_PATH_METADATA = {
     'extra/favicon.ico': {'path': 'favicon.ico'}
 }
 
-THEME = 'theme/svbhack'
+THEME = 'theme'
 GOOGLE_ANALYTICS = None
-DISQUS_SITENAME = 'hernrup_se_portal'
-USER_LOGO_URL = './images/site/logo_portal.png'
-TAGLINE = 'Under construction'
-INTERNET_DEFENSE_LEAGUE = False
+USER_LOGO_URL = './images/apple-touch-icon-50x50.png'

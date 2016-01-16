@@ -1,0 +1,111 @@
+<!DOCTYPE html>
+<html lang="{{ DEFAULT_LANG }}">
+
+<head>
+  <!-- ## for client-side less
+  <link rel="stylesheet/less" type="text/css" href="{{ SITEURL }}/theme/css/style.less">
+  <script src="http://cdnjs.cloudflare.com/ajax/libs/less.js/1.7.3/less.min.js" type="text/javascript"></script>
+  -->
+    <link href="https://fonts.googleapis.com/icon?family=Material+Icons" rel="stylesheet">
+    <link href="theme/css/materialize.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link href="theme/css/style.css" type="text/css" rel="stylesheet" media="screen,projection"/>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.5.0/css/font-awesome.min.css">
+
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1.0, user-scalable=no"/>
+    <meta name="author" content="{{ AUTHOR }}">
+    <meta name="description" content="Posts and writings by {{ AUTHOR }}">
+
+  {% block head %}
+  {% endblock %}
+
+  <title>
+    {{ SITENAME }}
+    {% block title %}{% endblock %}
+  </title>
+
+  {% include "modules/analytics.html" %}
+</head>
+
+
+<body>
+    <nav class="white" role="navigation">
+        <div class="nav-wrapper container">
+            <a id="logo-container" href="{{ SITEURL }}" class="brand-logo"><img src="{{ USER_LOGO_URL }}" />ernrup.se</a>
+
+            <!--<ul class="right hide-on-med-and-down">-->
+                <!--<li><a href="#">Navbar Link1</a></li>-->
+            <!--</ul>-->
+
+            <ul id="nav-mobile" class="side-nav">
+            {% for category, articles in categories %}
+            {% for article in articles|sort(attribute='order') %}
+
+                <li>
+                    <h5 class="center">
+                        <a href="{{ article.link }}">
+                            <i class="fa {{ article.fa_icon}}"></i>
+                            {{ article.title }}
+                            {% if category=='mhe' %}
+                                (Mikael)
+                            {% else %}
+                                (My)
+                            {% endif %}
+                        </a>
+                    </h5>
+                </li>
+
+            {% endfor %}
+            {% endfor %}
+
+            </ul>
+
+
+            <a href="#" data-activates="nav-mobile" class="button-collapse"><i class="material-icons">menu</i></a>
+        </div>
+    </nav>
+
+    {% block content %}
+    {% endblock %}
+
+
+
+  <footer class="page-footer teal">
+      {% block footer %}
+      {% endblock %}
+    <div class="container">
+      <div class="row">
+        <div class="col l6 s12">
+          <h5 class="white-text">Hernrup.se</h5>
+          <p class="grey-text text-lighten-4">This is a privat portal to Mr. and Ms. Hernrups online resources. Read at your own risk.</p>
+
+
+        </div>
+        <div class="col l3 s12">
+
+        </div>
+        <div class="col l3 s12">
+
+        </div>
+      </div>
+    </div>
+    <div class="footer-copyright">
+      <div class="container">
+      Made by
+          &copy; {{ AUTHOR }}. Built using <a class="brown-text text-lighten-3" href="http://getpelican.com" target="_blank">Pelican</a> and
+          <a class="brown-text text-lighten-3" href="http://materializecss.com">Materialize</a>
+      </div>
+    </div>
+    </div>
+  </footer>
+
+
+
+  <!--  Scripts-->
+  <script src="https://code.jquery.com/jquery-2.1.1.min.js"></script>
+  <script src="theme/js/materialize.js"></script>
+  <script src="theme/js/init.js"></script>
+
+  </body>
+
+</html>
