@@ -3,12 +3,14 @@ import sys
 import logging as log
 import subprocess
 from pelican.server import socketserver, ComplexHTTPRequestHandler
+import pelican.server
 from livereload import Server as Live_server
 from datetime import datetime
 from collections import namedtuple
 import os
-from core.tools import get_push_subtree
+from hernrup_se_core.tools import get_push_subtree
 from multiprocessing import Process
+from hernrup_se_core import ghp_import as ghp
 
 log_instace = log.getLogger()
 log_instace.setLevel(log.DEBUG)
@@ -97,8 +99,8 @@ def generate(path='./output', dev=False, autoreload=False, debug=False):
     subprocess.check_call(['pelican', 'content'] + run_args)
 
 
-def publish(path='output'):
-    get_push_subtree(path, 'origin', 'ph-pages')
+def publish(path='./output'):
+    ghp.cmd(os.path.abspath(path), push=True)
 
 
 def new_entry(title):

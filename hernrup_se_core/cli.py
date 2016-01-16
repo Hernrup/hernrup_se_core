@@ -1,7 +1,7 @@
 #!/usr/bin/env python
 import logging as log
 import argparse
-from core.utils import livereload, clean, new_entry, publish, serve, \
+from hernrup_se_core.utils import livereload, clean, new_entry, publish, serve, \
     generate, develop
 
 log_instace = log.getLogger()
@@ -95,6 +95,7 @@ def main():
         parser.print_help()
     except Exception as e:
         log.error(e)
+        raise e
 
 
 if __name__ == '__main__':

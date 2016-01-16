@@ -1,8 +1,6 @@
 venv
 .idea
-output
+*/output
 __pycache__
 *eggs
 *egg-info
-ntd
-colors
