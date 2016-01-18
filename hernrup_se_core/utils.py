@@ -93,7 +93,8 @@ def generate(source_path='.', output_path='./output', dev=False,
 def publish(output_path='./output', source_path='.'):
     with cd(source_path):
         logger.info('Publishing folder [{}]'.format(abspath(output_path)))
-        ghp.cmd(os.path.abspath(output_path), push=True)
+        ghp.cmd(os.path.abspath(output_path), push=True,
+                cname_file=os.path.abspath('CNAME'))
 
 
 def new_entry(title, source_path='.'):

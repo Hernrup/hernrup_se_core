@@ -11,6 +11,9 @@ import subprocess as sp
 import sys
 import time
 import unicodedata
+import logging
+
+logger = logging.getLogger(__name__)
 
 
 def enc(text):
@@ -114,7 +117,7 @@ def gitpath(fname):
     return "/".join(norm.split(os.path.sep))
 
 
-def run_import(srcdir, branch, message, nojekyll):
+def run_import(srcdir, branch, message, nojekyll, cname_file=None):
     cmd = ['git', 'fast-import', '--date-format=raw', '--quiet']
     kwargs = {"stdin": sp.PIPE}
     if sys.version_info >= (3, 2, 0):
@@ -125,7 +128,19 @@ def run_import(srcdir, branch, message, nojekyll):
         for fn in fnames:
             fpath = os.path.join(path, fn)
             gpath = gitpath(os.path.relpath(fpath, start=srcdir))
+            logger.debug(fpath)
+            logger.debug(gpath)
             add_file(pipe, fpath, gpath)
+    if os.path.isfile(cname_file):
+        logger.debug('Adding CNAME file from [{}]'.format(cname_file))
+        fpath = cname_file
+        gpath = 'CNAME'
+        logger.debug(fpath)
+        logger.debug(gpath)
+        add_file(pipe, fpath, gpath)
+    else:
+        logger.debug('No CNAME file found. Supplied path [{}]'
+                     .format(cname_file))
     if nojekyll:
         add_nojekyll(pipe)
     write(pipe, enc('\n'))
@@ -134,7 +149,7 @@ def run_import(srcdir, branch, message, nojekyll):
         sys.stdout.write(enc("Failed to process commit.\n"))
 
 
-def cmd(directory, message='Update', remote='origin', branch='gh-pages',
+def cmd(directory, cname_file=None, message='Update', remote='origin', branch='gh-pages',
         push=False):
 
     if len(directory) == 0:
@@ -148,7 +163,7 @@ def cmd(directory, message='Update', remote='origin', branch='gh-pages',
     if not try_rebase(remote, branch):
         raise RuntimeError("Failed to rebase %s branch." % branch)
 
-    run_import(directory, branch, message, False)
+    run_import(directory, branch, message, False, cname_file)
 
     if push:
         sp.check_call(['git', 'push', remote, branch, '--force'])

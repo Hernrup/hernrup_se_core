@@ -55,6 +55,7 @@ def main():
         parser.dispatch()
     except Exception as e:
         logger.error(e)
+        return -1
 
 
 if __name__ == '__main__':
