@@ -68,6 +68,7 @@ def setup_parser():
 
     def add_publish_parser(root_parser):
         def f(args):
+            generate(debug=False, dev=False, autoreload=False)
             publish()
         parser = root_parser.add_parser('publish')
         parser.set_defaults(func=f)

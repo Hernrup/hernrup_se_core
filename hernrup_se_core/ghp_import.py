@@ -151,6 +151,6 @@ def cmd(directory, message='Update', remote='origin', branch='gh-pages',
     run_import(directory, branch, message, False)
 
     if push:
-        sp.check_call(['git', 'push', remote, branch])
+        sp.check_call(['git', 'push', remote, branch, '--force'])
 
 
