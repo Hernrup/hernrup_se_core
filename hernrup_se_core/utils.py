@@ -28,7 +28,7 @@ def develop(root='output', port=5000, host='127.0.0.1', livereload_port=35729,
             args=('output', port, host, livereload_port, debug))
         livereloader.start()
 
-        open_browser(host, port)
+        # open_browser(host, port)
 
         generator.join()
         livereloader.join()
