@@ -10,6 +10,7 @@ setup(
         'pelican>=3.0.0,<4.0.0',
         'livereload>=2.4.0',
         'Markdown>=2.6.2',
+        'argh>=0.26.1'
     ],
     entry_points={
         'console_scripts': [

@@ -11,24 +11,25 @@ import os
 from hernrup_se_core.tools import get_push_subtree
 from multiprocessing import Process
 from hernrup_se_core import ghp_import as ghp
+from os.path import abspath
+from functools import partial
 
-log_instace = log.getLogger()
-log_instace.setLevel(log.DEBUG)
+logger = log.getLogger(__name__)
 
 
-def develop(root='output', port=5000, host='127.0.0.1', livereload_port=35729,
-            debug=False, dev=False):
+def develop(source_path='.', output_path='./output', port=5000, host='127.0.0.1',
+            livereload_port=35729, debug=False, dev=False):
     try:
-        generator = Process(target=generate,
-                            args=('./output', dev, True, debug))
+        gen_fn = partial(generate, output_path=output_path, dev=dev,
+                         autoreload=True, debug=debug, source_path=source_path)
+        lv_fn = partial(livereload, output_path=output_path, port=port,
+                        livereload_port=livereload_port, debug=debug)
+
+        generator = Process(target=gen_fn)
         generator.start()
 
-        livereloader = Process(
-            target=livereload,
-            args=('output', port, host, livereload_port, debug))
+        livereloader = Process(target=lv_fn)
         livereloader.start()
-
-        # open_browser(host, port)
 
         generator.join()
         livereloader.join()
@@ -37,8 +38,8 @@ def develop(root='output', port=5000, host='127.0.0.1', livereload_port=35729,
         livereloader.terminate()
 
 
-def serve(root='./output', port=5000, server='0.0.0.0'):
-    with cd(root):
+def serve(output_path='./output', port=5000, server='0.0.0.0'):
+    with cd(output_path):
         socketserver.TCPServer.allow_reuse_address = True
         try:
             httpd = socketserver.TCPServer((server, port),
@@ -47,63 +48,55 @@ def serve(root='./output', port=5000, server='0.0.0.0'):
             log.error("Could not listen on port %s, server %s.", port, server)
             sys.exit(getattr(e, 'exitcode', 1))
 
-
         log.info("Serving at port %s, server %s.", port, server)
         try:
             httpd.serve_forever()
-        except KeyboardInterrupt as e:
+        finally:
             log.info("Shutting down server.")
             httpd.socket.close()
 
 
-def livereload(root='output', port=5000, host='127.0.0.1', livereload_port=35729, debug=False):
+def livereload(output_path='./output', port=5000, host='127.0.0.1',
+               livereload_port=35729, debug=False):
 
     server = Live_server()
 
     params = namedtuple('params', 'autoreload debug')
     # server.watch('*.md', generate(params(False, True)))
-    server.watch('output/*.html')
+    server.watch(os.path.join(output_path, '*.html'))
 
-    server.serve(root='output', liveport=livereload_port,
+    server.serve(root=output_path, liveport=livereload_port,
                  port=port, host=host,
                  open_url=False, open_url_delay=None, debug=debug)
 
 
-def open_browser(url, port):
-    path = os.path.join(get_chrome_path(), 'chrome.exe')
-    subprocess.Popen([path, '{}:{}'.format(url, port)])
-
-
-def get_chrome_path():
-    return os.path.abspath(os.path.join(
-        os.getenv('APPDATA'), '..', 'Local', 'Google', 'Chrome', 'Application'
-    ))
-
-
-def add_chrome_to_path():
-    sys.path.append(get_chrome_path())
-
-
 def clean(path='./output'):
-    subprocess.call('rm -rf', path)
+    subprocess.call('rm -rf', abspath(path))
 
 
-def generate(path='./output', dev=False, autoreload=False, debug=False):
-    output = ['--output', path]
-    settings = ['--settings', 'conf_dev.py'] if dev else ['--settings',
-                                                            'conf.py']
-    reload = ['--autoreload'] if autoreload else []
-    debug = ['--debug'] if debug else []
+def generate(source_path='.', output_path='./output', dev=False,
+             autoreload=False, debug=False):
 
-    run_args = output + settings + reload + debug
-    subprocess.check_call(['pelican', 'content'] + run_args)
+    with cd(source_path):
+        logger.info('Generating blog for source [{}] to output [{}]'
+                    .format(abspath(source_path), abspath(output_path)))
+        output = ['--output', abspath(output_path)]
+        settings = ['--settings', 'conf_dev.py'] if dev else ['--settings',
+                                                              'conf.py']
+        reload = ['--autoreload'] if autoreload else []
+        debug = ['--debug'] if debug else []
+
+        run_args = output + settings + reload + debug
+        subprocess.check_call(['pelican', 'content'] + run_args)
 
 
-def publish(path='./output'):
-    ghp.cmd(os.path.abspath(path), push=True)
+def publish(output_path='./output', source_path='.'):
+    with cd(source_path):
+        logger.info('Publishing folder [{}]'.format(abspath(output_path)))
+        ghp.cmd(os.path.abspath(output_path), push=True)
 
 
-def new_entry(title):
+def new_entry(title, source_path='.'):
     template = """
 Title: {title}
 Date: {year}-{month}-{day} {hour}:{minute:02d}
@@ -118,7 +111,8 @@ Summary:
     def make_entry(title):
         today = datetime.today()
         slug = title.lower().strip().replace(' ', '-')
-        f_create = "content/{}_{:0>2}_{:0>2}_{}.md".format(
+
+        f_create = "{}_{:0>2}_{:0>2}_{}.md".format(
             today.year, today.month, today.day, slug)
         t = template.strip().format(title=title,
                                     hashes='#' * len(title),
@@ -128,7 +122,7 @@ Summary:
                                     hour=today.hour,
                                     minute=today.minute,
                                     slug=slug)
-        with open(f_create, 'w') as w:
+        with open(os.path.join(source_path, 'content', f_create, 'w')) as w:
             w.write(t)
         print("File created -> " + f_create)
 
@@ -136,6 +130,7 @@ Summary:
         make_entry(title)
     else:
         print("No title given")
+
 
 
 class cd:
