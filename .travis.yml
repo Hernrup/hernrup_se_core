@@ -1,7 +1,28 @@
+branches:
+  only:
+  - master
+env:
+  global:
+    secure: !!binary |
+      c3VpUTJrK3ZYUXRITC9hNVRNTDlTcUJXSHhTUWxUaHpMMy9ZdG1mUEErWXR2RU5KNTNIeEhsMFVj
+      U0tpREdkMTM0clcrSm8wTTBwclRxZWNaNkY5ZGk0b0lKU2o2S0dvRVdjdWlpbFlybW5zV2ZHRmtj
+      RXd2ODVGSkFnYktaeXRNZ1JMeHo5MjlTZi8xcENzWEdSWE9BSVNoeUUxUkMzbUdreFJWTGhXODR1
+      SnoxTTlMM0QyRTRpTWx3bUNPMjFob1FoR2F5dFJjOW9jQ2p2T0ZxWlQxY2JqU3NqdFJyN0FHYnZr
+      azBpbUs2Mm5pTmRGSWNEL3Y4a20yRlJoNFNraDZaSnpVWEhiQ285VFFLb2NBSHE1WmNxdm9zVk50
+      U0VhdGhNZlpDdy9rQ0I5N0FzZTlnODBOSk81eG9Md2FwN1dFYktYaGJQMk5GUENPQ0ZwWGFnUFJx
+      bVRBUkIwRUgwei94c1MxQUtRaDJjQko2SmQ1U2RGR2JrZ3FNUkN0UWpKUWtNejh2Y1pteFhsaFJX
+      dG04cllsdHd4Y3g3VS9VbTNranNHM3ZDWEZnd2pGMXNCRWt4RzFUV3ppZkRjcGxDQlJ3d2xBejVm
+      YTVBdEhjM3N5ODIydm1JTGZMM2xrZGt3M2EzNUErcFJuR3VGOVpuSDhRQ1VxTytSYUxaeW1mdDhx
+      M3lYeVkzdVVwRWZVdE9IMjNKak9OSG1XY0w3b1lxa3Z3OTIvbDI2L0ttdmNXVVVDemswcGZUdUdU
+      TUhyVlV1MmJRR1ZvR2NTTzBTdTVkbnhpK2VLaW93VDZwYkxVQlZsdVRnbU5jd1NvZ1VkR0VKd2pE
+      dzlwa1FBekthQWFuVmcrNDdPdmErV2hIM0JSZHVUUXpVMWV2MUd3UGRpRVRJWndXaEdab1ZNNFE9
+install:
+- git config --global user.email "CI@hernrup.se"
+- git config --global user.name "Travis CI"
+- pip install -r requirements.txt
 language: python
 python:
-  - "3.4"
-# command to install dependencies
-install: "pip install -r requirements.txt"
-# command to run tests
-script: blog publish -s hernrup_se_portal
+- '3.4'
+script:
+- git remote set-url origin "https://${GH_TOKEN}@github.com/hernrup/hernrup_se.git"
+- blog publish -s hernrup_se_portal

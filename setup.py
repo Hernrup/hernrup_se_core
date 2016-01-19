@@ -10,7 +10,10 @@ setup(
         'pelican>=3.0.0,<4.0.0',
         'livereload>=2.4.0',
         'Markdown>=2.6.2',
-        'argh>=0.26.1'
+        'argh>=0.26.1',
+        'requests>=2.9.1',
+        'pycrypto>=2.6.1',
+        'pyyaml>=3.11'
     ],
     entry_points={
         'console_scripts': [
