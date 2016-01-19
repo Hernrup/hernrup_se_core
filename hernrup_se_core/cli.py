@@ -7,6 +7,7 @@ from hernrup_se_core.utils import (livereload as livereload_fn,
                                    publish as publish_fn,
                                    generate as generate_fn,
                                    develop as develop_fn)
+from hernrup_se_core.travis import update_travis_conf
 import argh
 import sys
 
@@ -51,7 +52,7 @@ def main():
         setup_logging()
         parser = argh.ArghParser()
         parser.add_commands([generate, develop, serve, clean,
-                             new_entry, publish])
+                             new_entry, publish, update_travis_conf])
         parser.dispatch()
     except Exception as e:
         logger.error(e)
