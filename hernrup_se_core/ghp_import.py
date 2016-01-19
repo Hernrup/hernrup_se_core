@@ -128,15 +128,11 @@ def run_import(srcdir, branch, message, nojekyll, cname_file=None):
         for fn in fnames:
             fpath = os.path.join(path, fn)
             gpath = gitpath(os.path.relpath(fpath, start=srcdir))
-            logger.debug(fpath)
-            logger.debug(gpath)
             add_file(pipe, fpath, gpath)
     if os.path.isfile(cname_file):
         logger.debug('Adding CNAME file from [{}]'.format(cname_file))
         fpath = cname_file
         gpath = 'CNAME'
-        logger.debug(fpath)
-        logger.debug(gpath)
         add_file(pipe, fpath, gpath)
     else:
         logger.debug('No CNAME file found. Supplied path [{}]'
